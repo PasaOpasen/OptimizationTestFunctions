@@ -95,7 +95,10 @@ class Fletcher:
     
     b = math.pi
 
-    def __init__(self, dim = 2):
+    def __init__(self, dim = 2, seed = None):
+
+        if seed != None:
+            np.random.seed(seed)
 
         check_dim(dim, 1)
 
@@ -119,6 +122,229 @@ class Fletcher:
         return np.sum(self.A - B)
 
 
+class Griewank:
+    
+    b = 600
+
+    def __init__(self):
+
+        self.x_best = 0
+        self.f_best = 0
+
+        self.bounds = easy_bounds(Griewank.b)
+
+    
+    def __call__(self, vec):
+
+        s = sum(( x*x for x in vec))/4000
+        p = math.prod((math.cos(x/math.sqrt(i+1)) for i, x in enumerate(vec)))
+
+        return 1 + s - p
+
+
+
+class Penalty2:
+    
+    b = 50
+
+    def __init__(self, dim, a=5, k=100, m=4):
+
+        check_dim(dim, 2)
+
+        self.x_best = np.ones(dim)
+        self.f_best = 0
+
+        self.bounds = easy_bounds(Penalty2.b)
+
+        self.a, self.k, self.m = a, k, m
+        self.pi2 = 2 * math.pi
+        self.pi3 = 3 * math.pi
+
+    
+    def __call__(self, vec):
+
+        a, k, m = self.a, self.k, self.m
+
+        u = np.sum((vec[vec>a]-a)**m) + np.sum((-vec[vec<-a]-a)**m)
+
+        s1 = 10 * math.sin(self.pi3*vec[0])**2 + (vec[-1]-1)**2 * (1 + math.sin(self.pi2 * vec[-1]**2))
+
+        s2 = sum(((vec[i]-1)**2 * (1 + math.sin(self.pi3 * vec[i+1]**2)) for i in range(vec.size-1)))
+
+        return k*u + 0.1 * (s1 + s2)
+
+
+class Quartic:
+    
+    b = 1.28
+
+    def __init__(self):
+
+        self.x_best = 0
+        self.f_best = 0
+
+        self.bounds = easy_bounds(Quartic.b)
+
+    
+    def __call__(self, vec):
+
+        s = sum(( (i+1)*x**4 for i, x in enumerate(vec)))
+
+        return s
+
+
+
+class Rastrigin:
+    
+    b = 5.12
+
+    def __init__(self, dim = 1):
+
+        check_dim(dim, 1)
+
+        self.x_best = 0
+        self.f_best = 0
+
+        self.bounds = easy_bounds(Rastrigin.b)
+
+
+        self.pi2 = math.pi*2
+        self.bias = 10*dim
+
+    
+    def __call__(self, vec):
+
+        s = sum(( x*x - math.cos(self.pi2*x)*10 for x in vec))
+
+        return self.bias + s
+
+
+class SchwefelDouble:
+    
+    b = 65.536
+
+    def __init__(self):
+
+        self.x_best = 0
+        self.f_best = 0
+
+        self.bounds = easy_bounds(SchwefelDouble.b)
+
+
+    
+    def __call__(self, vec):
+
+        cs = np.cumsum(vec)
+
+        s = sum((cs[i]**2 for i in range(vec.size)))
+
+        return s
+
+
+class SchwefelMax:
+    
+    b = 100
+
+    def __init__(self):
+
+        self.x_best = 0
+        self.f_best = 0
+
+        self.bounds = easy_bounds(SchwefelMax.b)
+
+    def __call__(self, vec):
+
+        return np.abs(vec).max()
+
+class SchwefelAbs:
+    
+    b = 10
+
+    def __init__(self):
+
+        self.x_best = 0
+        self.f_best = 0
+
+        self.bounds = easy_bounds(SchwefelAbs.b)
+
+    def __call__(self, vec):
+
+        mod = np.abs(vec)
+
+        return np.sum(mod) + np.prod(mod)
+
+
+class SchwefelSin:
+    
+    b = 500
+
+    def __init__(self, dim = 1):
+
+        check_dim(dim, 1)
+
+        self.x_best = np.full(dim, 420.9687)
+        self.f_best = -12965.5
+
+        self.bounds = easy_bounds(SchwefelSin.b)
+
+    def __call__(self, vec):
+
+        return sum((x*math.sin(math.sqrt(abs(x))) for x in vec))
+
+
+class Stairs:
+    
+    b = 100
+
+    def __init__(self):
+
+        self.x_best = 0
+        self.f_best = 0
+
+        self.bounds = easy_bounds(Stairs.b)
+
+    def __call__(self, vec):
+
+        return sum(( math.floor(x + 0.5)**2 for x in vec))
+
+
+class Abs:
+    
+    b = 10
+
+    def __init__(self):
+
+        self.x_best = 0
+        self.f_best = 0
+
+        self.bounds = easy_bounds(Abs.b)
+
+    def __call__(self, vec):
+
+        return sum(( abs(x) for x in vec))
+
+
+class Michalewicz:
+    
+
+    def __init__(self, m = 1):
+
+        self.x_best = None
+        self.f_best = None
+
+        self.bounds = (0, math.pi, 0, math.pi)
+
+        self.m = m*2
+
+    def __call__(self, vec):
+
+        return -sum(( math.sin(x)*math.sin((i+1)*x**2/math.pi)**self.m for i, x in enumerate(vec)))
+
+
+
+
+
+
 
 
 
@@ -132,7 +358,18 @@ if __name__ == '__main__':
         Ackley(),
         AckleyTest(),
         Rosenbrock(3),
-        Fletcher(3)
+        Fletcher(3),
+        Griewank(),
+        Penalty2(3),
+        Quartic(),
+        Rastrigin(),
+        SchwefelDouble(),
+        SchwefelMax(),
+        SchwefelAbs(),
+        SchwefelSin(),
+        Stairs(),
+        Abs(),
+        Michalewicz()
     ]
 
     arr = np.array([1, 2, 3])
