@@ -53,7 +53,7 @@ class AckleyTest:
     
     b = 30
 
-    def __init__(self, dim = 2):
+    def __init__(self, dim):
 
         check_dim(dim, 2)
 
@@ -75,7 +75,7 @@ class Rosenbrock:
     
     b = 2.048
 
-    def __init__(self, dim = 2):
+    def __init__(self, dim):
 
         check_dim(dim, 2)
 
@@ -95,7 +95,7 @@ class Fletcher:
     
     b = math.pi
 
-    def __init__(self, dim = 2, seed = None):
+    def __init__(self, dim, seed = None):
 
         if seed != None:
             np.random.seed(seed)
@@ -198,7 +198,7 @@ class Rastrigin:
     
     b = 5.12
 
-    def __init__(self, dim = 1):
+    def __init__(self, dim):
 
         check_dim(dim, 1)
 
@@ -278,7 +278,7 @@ class SchwefelSin:
     
     b = 500
 
-    def __init__(self, dim = 1):
+    def __init__(self, dim):
 
         check_dim(dim, 1)
 
@@ -341,38 +341,98 @@ class Michalewicz:
         return -sum(( math.sin(x)*math.sin((i+1)*x**2/math.pi)**self.m for i, x in enumerate(vec)))
 
 
+class Scheffer:
+    
+    b = 100
+
+    def __init__(self, dim):
+
+        check_dim(dim, 2)
+
+        self.x_best = None
+        self.f_best = None
+
+        self.bounds = easy_bounds(Scheffer.b)
 
 
+    def __call__(self, vec):
+
+        return -sum(( (math.sin(math.sqrt(abs(vec[i] + vec[i+1] - 0.5))) / (1 + 0.001*(vec[i]**2 + vec[i+1]**2)))**2 for i in range(vec.size-1)))
 
 
+class Eggholder:
+    
+    b = 512
+
+    def __init__(self, dim):
+
+        check_dim(dim, 2)
+
+        self.x_best = None
+        self.f_best = None
+
+        self.bounds = easy_bounds(Eggholder.b)
 
 
+    def __call__(self, vec):
+
+        return -sum(( (vec[i+1] + 47) * math.sin(abs(vec[i+1] + vec[i]/2 + 47)) + vec[i] * math.sin(abs(vec[i]-vec[i+1] - 47)) for i in range(vec.size-1)))
+
+
+class Weierstrass:
+    
+    b = 0.5
+
+    def __init__(self, dim, a = 0.5, b = 3, kmax = 20):
+
+        check_dim(dim, 1)
+
+        self.x_best = 0
+        self.f_best = 0
+
+        self.bounds = easy_bounds(Weierstrass.b)
+
+        self.ak = np.array([a**k for k in range(kmax+1)])
+        self.pibk = np.pi * np.array([b**k for k in range(kmax+1)])
+
+        self.bias = -dim*np.sum(self.ak*np.cos(self.pibk))
+
+
+    def __call__(self, vec):
+    
+        return self.bias + sum(( sum((ak * math.cos(x*pibk)  for ak, pibk in zip(self.ak, self.pibk) )) for x in vec*2 + 1 ))
 
 
 
 
 if __name__ == '__main__':
-
+    arr = np.array([0.1, 0.2, 0.3])
+    
+    dim = arr.size
+    
     funcs = [
         Sphere(2),
         Ackley(),
-        AckleyTest(),
-        Rosenbrock(3),
-        Fletcher(3),
+        AckleyTest(dim),
+        Rosenbrock(dim),
+        Fletcher(dim),
         Griewank(),
-        Penalty2(3),
+        Penalty2(dim),
         Quartic(),
-        Rastrigin(),
+        Rastrigin(dim),
         SchwefelDouble(),
         SchwefelMax(),
         SchwefelAbs(),
-        SchwefelSin(),
+        SchwefelSin(dim),
         Stairs(),
         Abs(),
-        Michalewicz()
+        Michalewicz(),
+        Scheffer(dim),
+        Eggholder(dim),
+        Weierstrass(dim)
     ]
 
-    arr = np.array([1, 2, 3])
+    
 
     for f in funcs:
         print(f(arr))
