@@ -14,11 +14,13 @@ class Sphere:
 
     b = 5.12
 
-    def __init__(self, degree = 2):
+    def __init__(self, dim, degree = 2):
+
+        check_dim(dim, 1)
 
         self.deg = degree
-        self.x_best = 0 if degree % 2 == 0 else None
-        self.f_best = 0 if self.x_best != None else None
+        self.x_best = np.zeros(dim) if degree % 2 == 0 else None
+        self.f_best = 0 if not (self.x_best is None) else None
 
         self.bounds = easy_bounds(Sphere.b)
     
@@ -30,9 +32,11 @@ class Ackley:
     
     b = 30
 
-    def __init__(self):
+    def __init__(self, dim):
 
-        self.x_best = 0
+        check_dim(dim, 1)
+
+        self.x_best = np.zeros(dim)
         self.f_best = 0
 
         self.bounds = easy_bounds(Ackley.b)
@@ -119,16 +123,18 @@ class Fletcher:
 
         B = np.sum(self.a * np.sin(vec) + self.b * np.cos(vec) ,axis = 0)
         #raise Exception()
-        return np.sum(self.A - B)
+        return  sum((a-b)**2 for a, b in zip(self.A, B))
 
 
 class Griewank:
     
     b = 600
 
-    def __init__(self):
+    def __init__(self, dim):
 
-        self.x_best = 0
+        check_dim(dim, 1)
+
+        self.x_best = np.zeros(dim)
         self.f_best = 0
 
         self.bounds = easy_bounds(Griewank.b)
@@ -178,9 +184,11 @@ class Quartic:
     
     b = 1.28
 
-    def __init__(self):
+    def __init__(self, dim):
 
-        self.x_best = 0
+        check_dim(dim, 1)
+
+        self.x_best = np.zeros(dim)
         self.f_best = 0
 
         self.bounds = easy_bounds(Quartic.b)
@@ -202,7 +210,7 @@ class Rastrigin:
 
         check_dim(dim, 1)
 
-        self.x_best = 0
+        self.x_best = np.zeros(dim)
         self.f_best = 0
 
         self.bounds = easy_bounds(Rastrigin.b)
@@ -223,9 +231,10 @@ class SchwefelDouble:
     
     b = 65.536
 
-    def __init__(self):
+    def __init__(self, dim):
+        check_dim(dim)
 
-        self.x_best = 0
+        self.x_best = np.zeros(dim)
         self.f_best = 0
 
         self.bounds = easy_bounds(SchwefelDouble.b)
@@ -245,9 +254,10 @@ class SchwefelMax:
     
     b = 100
 
-    def __init__(self):
+    def __init__(self, dim):
+        check_dim(dim)
 
-        self.x_best = 0
+        self.x_best = np.zeros(dim)
         self.f_best = 0
 
         self.bounds = easy_bounds(SchwefelMax.b)
@@ -260,9 +270,11 @@ class SchwefelAbs:
     
     b = 10
 
-    def __init__(self):
+    def __init__(self, dim):
 
-        self.x_best = 0
+        check_dim(dim)
+
+        self.x_best = np.zeros(dim)
         self.f_best = 0
 
         self.bounds = easy_bounds(SchwefelAbs.b)
@@ -296,9 +308,11 @@ class Stairs:
     
     b = 100
 
-    def __init__(self):
+    def __init__(self, dim):
 
-        self.x_best = 0
+        check_dim(dim)
+
+        self.x_best = np.zeros(dim)
         self.f_best = 0
 
         self.bounds = easy_bounds(Stairs.b)
@@ -312,9 +326,11 @@ class Abs:
     
     b = 10
 
-    def __init__(self):
+    def __init__(self, dim):
 
-        self.x_best = 0
+        check_dim(dim)
+
+        self.x_best = np.zeros(dim)
         self.f_best = 0
 
         self.bounds = easy_bounds(Abs.b)
@@ -327,7 +343,7 @@ class Abs:
 class Michalewicz:
     
 
-    def __init__(self, m = 1):
+    def __init__(self, m = 10):
 
         self.x_best = None
         self.f_best = None
@@ -387,7 +403,7 @@ class Weierstrass:
 
         check_dim(dim, 1)
 
-        self.x_best = 0
+        self.x_best = np.zeros(dim)
         self.f_best = 0
 
         self.bounds = easy_bounds(Weierstrass.b)
@@ -411,21 +427,21 @@ if __name__ == '__main__':
     dim = arr.size
     
     funcs = [
-        Sphere(2),
-        Ackley(),
+        Sphere(dim, 2),
+        Ackley(dim),
         AckleyTest(dim),
         Rosenbrock(dim),
         Fletcher(dim),
-        Griewank(),
+        Griewank(dim),
         Penalty2(dim),
-        Quartic(),
+        Quartic(dim),
         Rastrigin(dim),
-        SchwefelDouble(),
-        SchwefelMax(),
-        SchwefelAbs(),
+        SchwefelDouble(dim),
+        SchwefelMax(dim),
+        SchwefelAbs(dim),
         SchwefelSin(dim),
-        Stairs(),
-        Abs(),
+        Stairs(dim),
+        Abs(dim),
         Michalewicz(),
         Scheffer(dim),
         Eggholder(dim),
