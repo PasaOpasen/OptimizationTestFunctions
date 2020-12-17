@@ -1,10 +1,23 @@
 
-from mpl_toolkits.mplot3d import Axes3D  # noqa: F401 unused import
+from mpl_toolkits.mplot3d import Axes3D  
 import numpy as np 
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator, LinearLocator, FormatStrFormatter
 
 from matplotlib import cm
+
+from OppOpPopInit import OppositionOperators
+
+
+def get_good_arrow_place(optimum, bounds):
+    opt = np.array(optimum)
+    minimums = np.array([bounds[0], bounds[2]])
+    maximums = np.array([bounds[1], bounds[3]])
+
+    t1 = OppositionOperators.Continual.over(minimums, maximums)(opt)
+    t2 = OppositionOperators.Continual.quasi_reflect(minimums, maximums)(t1)
+
+    return tuple(t2)
 
 
 
@@ -83,7 +96,9 @@ def plot_3d(func, points_by_dim = 50, title = '', bounds = None, show_best_if_ex
         title += f"\n best solution: f{func.x_best} = {round(func(func.x_best))}"
 
         if show_best_if_exists and plot_heatmap:
-            xytext = tuple(np.array([(xmax+xmin)/2, (ymax+ymin)/2]) + np.random.uniform(-func.x_best/2, func.x_best/2, 2)) #tuple(np.random.uniform(0, min((xmax+xmin)/2, (ymax+ymin)/2), 2))
+            #xytext = tuple(np.array([(xmax+xmin)/2, (ymax+ymin)/2]) + np.random.uniform(-func.x_best/2, func.x_best/2, 2)) #tuple(np.random.uniform(0, min((xmax+xmin)/2, (ymax+ymin)/2), 2))
+
+            xytext = get_good_arrow_place(func.x_best, bounds)
 
             bbox = dict(boxstyle ="round", fc ="0.8") 
             arrowprops = dict( 
@@ -102,7 +117,7 @@ def plot_3d(func, points_by_dim = 50, title = '', bounds = None, show_best_if_ex
     fig.tight_layout()
 
     if save_as != None:
-        plt.savefig(save_as, dpi = 300)
+        plt.savefig(save_as, dpi = 250)
     
     plt.show()
 

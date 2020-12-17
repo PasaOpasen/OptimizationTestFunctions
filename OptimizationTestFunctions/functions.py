@@ -1,3 +1,10 @@
+#
+#
+# See also https://www.sfu.ca/~ssurjano/optimization.html
+#
+#
+
+
 
 import math
 import numpy as np
@@ -30,7 +37,7 @@ class Sphere:
 
 class Ackley:
     
-    b = 30
+    b = 3
 
     def __init__(self, dim):
 
@@ -41,13 +48,13 @@ class Ackley:
 
         self.bounds = easy_bounds(Ackley.b)
 
-        self.bias = 20+np.e
-        self.twopi = 2*np.pi
+        self.bias = 20 + math.e
+        self.pi2 = 2 * math.pi
     
     def __call__(self, vec):
 
-        s1 = sum((x*x/(i+1) for i, x in enumerate(vec)))
-        s2 = sum((math.cos(self.twopi * x)/(i+1) for i, x in enumerate(vec)))
+        s1 = sum((x*x for x in vec))/vec.size
+        s2 = sum((math.cos(self.pi2 * x) for x in vec))/vec.size
 
 
         return self.bias - 20*math.exp(-0.2*s1) - math.exp(s2)
@@ -301,12 +308,12 @@ class SchwefelSin:
 
     def __call__(self, vec):
 
-        return sum((x*math.sin(math.sqrt(abs(x))) for x in vec))
+        return -sum((x*math.sin(math.sqrt(abs(x))) for x in vec))
 
 
 class Stairs:
     
-    b = 100
+    b = 6
 
     def __init__(self, dim):
 
@@ -359,21 +366,21 @@ class Michalewicz:
 
 class Scheffer:
     
-    b = 100
+    b = 7
 
     def __init__(self, dim):
 
         check_dim(dim, 2)
 
-        self.x_best = None
-        self.f_best = None
+        self.x_best = np.zeros(dim)
+        self.f_best = 0
 
         self.bounds = easy_bounds(Scheffer.b)
 
 
     def __call__(self, vec):
 
-        return -sum(( (math.sin(math.sqrt(abs(vec[i] + vec[i+1] - 0.5))) / (1 + 0.001*(vec[i]**2 + vec[i+1]**2)))**2 for i in range(vec.size-1)))
+        return 0.5 + sum((  (math.sin( vec[i]**2 - vec[i+1]**2 )**2 - 0.5) / (1 + 0.001*(vec[i]**2 + vec[i+1]**2) )**2  for i in range(vec.size-1)))
 
 
 class Eggholder:
@@ -392,7 +399,7 @@ class Eggholder:
 
     def __call__(self, vec):
 
-        return -sum(( (vec[i+1] + 47) * math.sin(abs(vec[i+1] + vec[i]/2 + 47)) + vec[i] * math.sin(abs(vec[i]-vec[i+1] - 47)) for i in range(vec.size-1)))
+        return -sum(( (vec[i+1] + 47) * math.sin(math.sqrt(abs(vec[i+1] + vec[i]/2 + 47))) + vec[i] * math.sin(math.sqrt(abs(vec[i]-vec[i+1] - 47))) for i in range(vec.size-1)))
 
 
 class Weierstrass:
@@ -422,6 +429,7 @@ class Weierstrass:
 
 
 if __name__ == '__main__':
+    
     arr = np.array([0.1, 0.2, 0.3])
     
     dim = arr.size
