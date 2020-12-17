@@ -91,7 +91,7 @@ plot_3d(f2,
         title = fr"{type(f1).__name__}\ with\ seed = {seed}",
         bounds = None, 
         show_best_if_exists = True, 
-        save_as = "Fletcher5.png",
+        save_as = "Fletcher6.png",
         cmap = 'inferno',
         plot_surface = False,
         plot_heatmap = True)

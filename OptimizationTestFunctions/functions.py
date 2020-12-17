@@ -435,13 +435,13 @@ if __name__ == '__main__':
     dim = arr.size
     
     funcs = [
-        Sphere(dim, 2),
+        Sphere(dim, degree = 2),
         Ackley(dim),
         AckleyTest(dim),
         Rosenbrock(dim),
-        Fletcher(dim),
+        Fletcher(dim, seed = None),
         Griewank(dim),
-        Penalty2(dim),
+        Penalty2(dim, a=5, k=100, m=4),
         Quartic(dim),
         Rastrigin(dim),
         SchwefelDouble(dim),
@@ -450,10 +450,10 @@ if __name__ == '__main__':
         SchwefelSin(dim),
         Stairs(dim),
         Abs(dim),
-        Michalewicz(),
+        Michalewicz(m = 10),
         Scheffer(dim),
         Eggholder(dim),
-        Weierstrass(dim)
+        Weierstrass(dim, a = 0.5, b = 3, kmax = 20)
     ]
 
     

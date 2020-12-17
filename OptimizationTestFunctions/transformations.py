@@ -15,7 +15,23 @@ class Noises:
 class Transformation:
 
     def __init__(self, transformed_function, shift_step = None, rotation_matrix = None, noise_generator = None, seed = None):
+        """
+        Creates Transformation object
 
+        Parameters
+        ----------
+        transformed_function : function or class callable object
+            transformed function.
+        shift_step : numpy 1D array/None, optional
+            array of shifts by each dimension or None. The default is None.
+        rotation_matrix : 2D-array/int/None, optional
+            2D ortogonal rotation matrix or dimension for creating random rotation matrix or None if no rotate. The default is None.
+        noise_generator : function, optional
+            function gets current value and returns value with some noise. The default is None.
+        seed : int, optional
+            random seed for rotation matrix if needed reproduce. The default is None.
+
+        """
         if not (seed is None):
             np.random.seed(seed)
 

@@ -22,6 +22,30 @@ def get_good_arrow_place(optimum, bounds):
 
 
 def plot_3d(func, points_by_dim = 50, title = '', bounds = None, show_best_if_exists = True, save_as = None, cmap = 'twilight', plot_surface = True, plot_heatmap = True):
+    """
+    Plots function surface and/or heatmap
+
+    Parameters
+    ----------
+    func : class callable object
+        Object which can be called as function.
+    points_by_dim : int, optional
+        points for each dimension of plotting (50x50, 100x100...). The default is 50.
+    title : str, optional
+        title of plot with LaTeX notation. The default is ''.
+    bounds : tuple, optional
+        space bounds with structure (xmin, xmax, ymin, ymax). The default is None.
+    show_best_if_exists : boolean, optional
+        point best solution by arrow if x_best exists. The default is True.
+    save_as : str/None, optional
+        file path to save image (None if not needed). The default is None.
+    cmap : str, optional
+        color map of plot. The default is 'twilight'.
+    plot_surface : boolean, optional
+        plot 3D surface. The default is True.
+    plot_heatmap : boolean, optional
+        plot 2D heatmap. The default is True.
+    """
     
     assert (plot_surface or plot_heatmap), "should be plotted at least surface or heatmap!"
 
