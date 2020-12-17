@@ -145,7 +145,7 @@ with arguments:
 * `save_as` : **str/None**, optional;
         file path to save image (None if not needed). The default is None.
 * `cmap` : **str**, optional;
-        color map of plot. The default is 'twilight'.
+        color map of plot. The default is `'twilight'`. See another cmaps examples [here](https://github.com/PasaOpasen/Wave-animation-from-svd#heatmaps)
 * `plot_surface` : **boolean**, optional;
         plot 3D surface. The default is True.
 * `plot_heatmap` : **boolean**, optional;
