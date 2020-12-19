@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="OptimizationTestFunctions", 
-    version="1.0.0",
+    version="1.0.1",
     author="Demetry Pascal",
     author_email="qtckpuhdsa@gmail.com",
     maintainer = ['Demetry Pascal'],
@@ -22,8 +22,8 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Topic :: Software Development :: Libraries :: Python Modules",
-    ]#,
-    #install_requires=['numpy']
+    ],
+    install_requires=['numpy', 'matplotlib', 'OppOpPopInit']
     
     )
 
