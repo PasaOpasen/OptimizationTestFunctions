@@ -6,7 +6,7 @@ version](https://badge.fury.io/py/OptimizationTestFunctions.svg)](https://pypi.o
 [![Downloads](https://pepy.tech/badge/optimizationtestfunctions/month)](https://pepy.tech/project/optimizationtestfunctions)
 [![Downloads](https://pepy.tech/badge/optimizationtestfunctions/week)](https://pepy.tech/project/optimizationtestfunctions)
 
-Collection of optimization test functions and some useful methods for working with them
+The package from [DPEA](https://github.com/PasaOpasen/PasaOpasen.github.io/blob/master/EA_packages.md). Collection of optimization test functions and some useful methods for working with them
 
 ```
 pip install OptimizationTestFunctions
