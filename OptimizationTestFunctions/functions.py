@@ -55,10 +55,7 @@ class Ackley:
 
         s1 = sum((x*x for x in vec))/vec.size
         s2 = sum((math.cos(self.pi2 * x) for x in vec))/vec.size
-
-
-        return self.bias - 20*math.exp(-0.2*s1) - math.exp(s2)
-
+        return self.bias - 20*math.exp(-0.2*math.sqrt(s1)) - math.exp(s2)
 
 class AckleyTest:
     
